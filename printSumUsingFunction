@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// int sum (int a, int b){
+//     int sm = a+b;
+//     return sm;
+// }
+
+// int main()
+// {
+//     int x = 10, y = 20;
+//     cout << sum(x,y) << endl;
+//     return 0;
+// }
+
+
+// using void 
+
+void sum(int a, int b){
+    int sm = a+b;
+    cout << sm << endl;
+    return;
+}
+int main (){
+    int no1 = 10, no2 = 20;
+    sum(no1, no2);
+    return 0;
+}
+
