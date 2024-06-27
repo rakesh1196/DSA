@@ -1,0 +1,118 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// Function to check if any substring of length mid contains
+// all characters of the pattern
+bool isValid(string& str, string& pattern, int mid,
+			int& start)
+{
+	// Count the frequency of each character in the pattern
+	int count[256] = { 0 };
+
+	// Stores number of distinct characters in pattern
+	int distinct = 0;
+
+	bool found = false;
+
+	// Count the frequency of each character in the pattern
+	for (char x : pattern) {
+		count[x]++;
+		if (count[x] == 1)
+			distinct++;
+	}
+
+	// Stores the number of charcters in a substring of size
+	// mid in str whose frequency is same as frequency in
+	// pattern
+	int curr_count = 0;
+	for (int i = 0; i < str.size(); i++) {
+		count[str[i]]--;
+		if (count[str[i]] == 0) {
+			curr_count++;
+		}
+		if (i >= mid) {
+			count[str[i - mid]]++;
+			if (count[str[i - mid]] == 1) {
+				curr_count--;
+			}
+		}
+		if (i >= mid - 1) {
+
+			// Substring of length mid found which contains
+			// all the characters of pattern
+			if (curr_count == distinct) {
+
+				found = true;
+
+				// Stores starting index of that substring
+				start = (i - mid) + 1;
+				break;
+			}
+		}
+	}
+
+	return found;
+}
+
+// Function to find the smallest substring containing all
+// characters of the pattern
+string findSmallestSubstring(string& str, string& pattern)
+{
+	int len_str = str.length();
+	int len_pattern = pattern.length();
+	string smallestSubstring = "";
+
+	int minLength = INT_MAX;
+
+	// Lower bound and Upper Bound for Binary Serach
+	int low_bound = 1, high_bound = len_str;
+
+	// Stores starting index of min length substring
+	int idx;
+
+	// Applying Binary Search on answer
+	while (low_bound <= high_bound) {
+		int mid = (low_bound + high_bound) / 2;
+		int start;
+
+		// If a substring of length mid is found which
+		// contains all teh characters of pattern then
+		// update minLenght and high_bound otherwise update
+		// low_bound
+		if (isValid(str, pattern, mid, start)) {
+			if (mid < minLength) {
+				minLength = mid;
+				idx = start;
+			}
+			high_bound = mid - 1;
+		}
+	
+		else {
+			low_bound = mid + 1;
+		}
+	}
+
+	return smallestSubstring = str.substr(idx, minLength);
+}
+
+int main()
+{
+	string str1 = "this is a test string";
+	string pattern1 = "tist";
+	cout << "Input: string = \"" << str1
+		<< "\", pattern = \"" << pattern1 << "\"" << endl;
+	cout << "Output: \""
+		<< findSmallestSubstring(str1, pattern1) << "\""
+		<< endl;
+
+	string str2 = "helloworld";
+	string pattern2 = "ork";
+	cout << "Input: string = \"" << str2
+		<< "\", pattern = \"" << pattern2 << "\"" << endl;
+	cout << "Output: \""
+		<< findSmallestSubstring(str2, pattern2) << "\""
+		<< endl;
+
+	return 0;
+}
